@@ -9,9 +9,7 @@ class SavedPlayers extends React.Component {
   render() {
     return(
       <div className='playerList'>
-        <PlayerCard/>
-        <PlayerCard/>
-        <PlayerCard/>
+        Player Name
       </div>
     )
   }

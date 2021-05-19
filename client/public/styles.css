@@ -1,5 +1,7 @@
 .playerList {
-  display: inline-flex
+  display: inline-flex;
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 .playerCard {
@@ -9,4 +11,9 @@
 .bigHeader {
   color: blue;
   margin: auto
+}
+
+.headshot {
+  width: 40%;
+  height: auto;
 }

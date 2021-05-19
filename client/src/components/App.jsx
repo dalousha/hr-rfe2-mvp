@@ -26,7 +26,6 @@ class App extends React.Component {
         this.setState({
           players: data.league.standard
         })
-        console.log(this.state.players)
       }
     })
   }
@@ -34,7 +33,7 @@ class App extends React.Component {
   render() {
     return(
       <div>
-        <h1 className='bigHeader'>Hello All!</h1>
+        <h1 className='bigHeader'>NBA STAT TRACKER</h1>
         <h3>Search</h3>
         <Search players={this.state.players}/>
 
