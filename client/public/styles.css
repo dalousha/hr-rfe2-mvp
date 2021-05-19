@@ -1,0 +1,12 @@
+.playerList {
+  display: inline-flex
+}
+
+.playerCard {
+  padding: 10px
+}
+
+.bigHeader {
+  color: blue;
+  margin: auto
+}
