@@ -13,7 +13,9 @@ class PlayerCard extends React.Component {
       careerAPG: '',
       imgSrc: `https://nba-players.herokuapp.com/players/${this.props.player.lastName}/${this.props.player.firstName}`
     }
-
+    this.getStats = this.getStats.bind(this);
+    this.savePlayer = this.savePlayer.bind(this);
+    this.deletePlayer = this.deletePlayer.bind(this);
   }
 
   componentDidMount() {
@@ -21,11 +23,9 @@ class PlayerCard extends React.Component {
   }
 
   componentDidUpdate(oldProps) {
-    if (this.props.player.lastName !== oldProps.player.lastName || this.props.player.firstName !== oldProps.player.firstName) {
-      this.getPhoto(this.props.player.lastName, this.props.player.firstName);
-    }
     if (this.props.player.personId !== oldProps.player.personId) {
       this.getStats(this.props.player.personId);
+      this.getPhoto(this.props.player.lastName, this.props.player.firstName);
     }
   }
 
@@ -53,10 +53,41 @@ class PlayerCard extends React.Component {
     this.setState({imgSrc: `https://nba-players.herokuapp.com/players/${this.props.player.lastName}/${this.props.player.firstName}`})
   }
 
+  savePlayer(firstName, lastName, personId) {
+    $.ajax({
+      method: 'POST',
+      url: 'http://localhost:3000/players',
+      data: JSON.stringify({
+        firstName: firstName,
+        lastName: lastName,
+        personId: personId
+      }),
+      dataType: 'json',
+      contentType: 'application/json',
+      success: (res) => {console.log('saved', firstName, ' ', lastName)}
+    })
+    this.props.get();
+  }
+
+  deletePlayer(id) {
+    $.ajax({
+      method: 'DELETE',
+      url: 'http://localhost:3000/players',
+      data: JSON.stringify({
+        personId: id
+      }),
+      dataType: 'json',
+      contentType:'application/json',
+      success: (res) => (console.log('deleted', id))
+    })
+    window.location.reload();
+    this.props.get();
+  }
+
   render() {
     return (
       <div className='playerCard'>
-        {this.props.player.firstName} {this.props.player.lastName}
+        <span className='playerName'>{this.props.player.firstName} {this.props.player.lastName}</span>
         <div>
           <img className='headshot' src={this.state.imgSrc}></img> <br/>
           <span> Season PPG: {this.state.seasonPPG}</span> <br />
@@ -65,9 +96,9 @@ class PlayerCard extends React.Component {
           <span> Career PPG: {this.state.careerPPG}</span> <br />
           <span> Career RPG: {this.state.careerRPG}</span> <br />
           <span> Career APG: {this.state.careerAPG}</span> <br />
+        </div> <br />
+        {(!this.props.isSearch) ? <button onClick={() => this.savePlayer(this.props.player.firstName, this.props.player.lastName, this.props.player.personId)}>Save</button> : <button onClick={() => this.deletePlayer(this.props.player.personId)}>Remove</button>}
 
-        </div>
-        <button>Save</button>
       </div>
     )
   }

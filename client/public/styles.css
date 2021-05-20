@@ -5,7 +5,9 @@
 }
 
 .playerCard {
-  padding: 10px
+  width: 200px;
+  height: 300px;
+  padding: 10px;
 }
 
 .bigHeader {
@@ -14,6 +16,11 @@
 }
 
 .headshot {
-  width: 40%;
+  max-width: 80%;
   height: auto;
+}
+
+.playerName{
+  font-size: larger;
+  text-align: center;
 }

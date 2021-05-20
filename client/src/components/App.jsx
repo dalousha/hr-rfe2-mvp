@@ -7,15 +7,34 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      players: []
+      players: [],
+      savedPlayers: []
     }
 
     this.getPlayers = this.getPlayers.bind(this);
+    this.getSavedPlayers = this.getSavedPlayers.bind(this);
   }
 
   componentDidMount() {
     this.getPlayers();
+    this.getSavedPlayers();
   }
+
+  getSavedPlayers() {
+    $.ajax({
+      method: 'GET',
+      url: 'http://localhost:3000/players',
+      contentType: 'application/json',
+      success: (data) => {
+        console.log(data)
+        this.setState({
+          savedPlayers: data
+        })
+      }
+    })
+  }
+
+
 
   getPlayers() {
     $.ajax({
@@ -35,10 +54,10 @@ class App extends React.Component {
       <div>
         <h1 className='bigHeader'>NBA STAT TRACKER</h1>
         <h3>Search</h3>
-        <Search players={this.state.players}/>
+        <Search players={this.state.players} get={this.getSavedPlayers}/>
 
         <h3>My List</h3>
-        <SavedPlayers/>
+        <SavedPlayers players={this.state.savedPlayers} get={this.getSavedPlayers}/>
 
 
       </div>

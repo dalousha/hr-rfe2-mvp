@@ -8,6 +8,7 @@ class Search extends React.Component {
     this.state = {
       filter: '',
       searchResults: [],
+      fromSearch: true
     }
     this.onSearchChange = this.onSearchChange.bind(this);
     this.onSearchClick = this.onSearchClick.bind(this);
@@ -40,7 +41,7 @@ class Search extends React.Component {
         <input className="Search" type="text" placeholder="Search for a Player" value={this.state.filter} onChange={this.onSearchChange} ></input>
         <button onClick={this.onSearchClick}>Search</button>
         <br />
-        <SearchResults searchResults={this.state.searchResults}/>
+        <SearchResults searchResults={this.state.searchResults} isSearch={this.state.fromSearch} get={this.props.get}/>
       </div>
     )
   }

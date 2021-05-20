@@ -6,10 +6,18 @@ class SavedPlayers extends React.Component {
     super(props);
   }
 
+  componentDidUpdate(oldProps) {
+    if (this.props.savedPlayers !== oldProps.savedPlayers) {
+      this.props.get();
+    }
+  }
+
   render() {
     return(
       <div className='playerList'>
-        Player Name
+        {this.props.players.map((player, index) =>
+        <PlayerCard key={index} player={player} isSearch={true} get={this.props.get}/>
+          )}
       </div>
     )
   }
