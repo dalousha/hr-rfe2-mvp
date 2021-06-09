@@ -11,20 +11,24 @@ class PlayerCard extends React.Component {
       careerPPG: '',
       careerRPG: '',
       careerAPG: '',
-      imgSrc: `https://nba-players.herokuapp.com/players/${this.props.player.lastName}/${this.props.player.firstName}`
+      imgSrc: `https://nba-players.herokuapp.com/players/${this.props.player.lastName}/${this.props.player.firstName}`,
+      team: 'NA'
     }
     this.getStats = this.getStats.bind(this);
     this.savePlayer = this.savePlayer.bind(this);
     this.deletePlayer = this.deletePlayer.bind(this);
+    this.getTeamName = this.getTeamName.bind(this);
   }
 
   componentDidMount() {
     this.getStats(this.props.player.personId);
+    this.getTeamName(this.props.player.teamId);
   }
 
   componentDidUpdate(oldProps) {
     if (this.props.player.personId !== oldProps.player.personId) {
       this.getStats(this.props.player.personId);
+      this.getTeamName(this.props.player.teamId);
       this.getPhoto(this.props.player.lastName, this.props.player.firstName);
     }
   }
@@ -49,8 +53,27 @@ class PlayerCard extends React.Component {
     })
   }
 
+  getTeamName(id) {
+    $.ajax({
+      method: 'GET',
+      url: `http://data.nba.net/10s/prod/v1/2020/teams.json`,
+      dataType: 'json',
+      success: (data) => {
+        for (var i = 0; i < data.league.standard.length; i++) {
+          // console.log(data.league.standard[i].teamId, id, data.league.standard[i].tricode)
+          if (id === data.league.standard[i].teamId) {
+            this.setState({team: data.league.standard[i].tricode})
+          }
+        }
+      }
+    })
+  }
+
   getPhoto(lastName, firstName) {
-    this.setState({imgSrc: `https://nba-players.herokuapp.com/players/${this.props.player.lastName}/${this.props.player.firstName}`})
+    if (lastName.includes('Jr.')) {
+      lastName = lastName.replace(' Jr.','')
+    }
+    this.setState({imgSrc: `https://nba-players.herokuapp.com/players/${lastName}/${firstName}`})
   }
 
   savePlayer(firstName, lastName, personId) {
@@ -60,7 +83,7 @@ class PlayerCard extends React.Component {
       data: JSON.stringify({
         firstName: firstName,
         lastName: lastName,
-        personId: personId
+        personId: personId,
       }),
       dataType: 'json',
       contentType: 'application/json',
@@ -87,7 +110,8 @@ class PlayerCard extends React.Component {
   render() {
     return (
       <div className='playerCard'>
-        <span className='playerName'>{this.props.player.firstName} {this.props.player.lastName}</span>
+        <span className='playerName'>{this.props.player.firstName} {this.props.player.lastName}</span> < br/>
+        <span>{this.state.team}</span>
         <div>
           <img className='headshot' src={this.state.imgSrc}></img> <br/>
           <span> Season PPG: {this.state.seasonPPG}</span> <br />

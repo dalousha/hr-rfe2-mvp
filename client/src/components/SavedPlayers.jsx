@@ -14,7 +14,7 @@ class SavedPlayers extends React.Component {
 
   render() {
     return(
-      <div className='playerList'>
+      <div className='playerList' className='myList'>
         {this.props.players.map((player, index) =>
         <PlayerCard key={index} player={player} isSearch={true} get={this.props.get}/>
           )}
